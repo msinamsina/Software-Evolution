@@ -31,7 +31,6 @@ jobs:
 
       - name: Build LaTeX Docker image
         run: |
-          cd ..
           docker build -t persian-latex .
 
       - name: Test LaTeX compilation
