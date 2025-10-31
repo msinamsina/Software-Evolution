@@ -1,0 +1,29 @@
+# فایل‌های LaTeX موقت
+*.aux
+*.log
+*.out
+*.toc
+*.lof
+*.lot
+*.bbl
+*.blg
+*.nav
+*.snm
+*.vrb
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+*.xdv
+
+# فایل‌های PDF (اختیاری - اگر نمی‌خواهید PDF را commit کنید)
+# *.pdf
+
+# فایل‌های پشتیبان
+*~
+*.bak
+*.swp
+
+# فایل‌های سیستم
+.DS_Store
+Thumbs.db
+
