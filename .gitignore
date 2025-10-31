@@ -1,4 +1,4 @@
-# فایل‌های LaTeX موقت
+# LaTeX auxiliary files
 *.aux
 *.log
 *.out
@@ -15,15 +15,23 @@
 *.fdb_latexmk
 *.xdv
 
-# فایل‌های PDF (اختیاری - اگر نمی‌خواهید PDF را commit کنید)
-# *.pdf
-
-# فایل‌های پشتیبان
+# LaTeX temporary files
+*.backup
 *~
-*.bak
-*.swp
+*.tmp
 
-# فایل‌های سیستم
+# System files
 .DS_Store
 Thumbs.db
 
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Build artifacts (uncomment if you don't want to track PDFs)
+# *.pdf
+
+# GitHub Actions artifacts
+.github/workflows/artifacts/
