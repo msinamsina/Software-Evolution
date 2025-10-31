@@ -17,6 +17,7 @@ on:
       - "**.tex"
       - "**.bib"
       - "images/**"
+      - ".github/workflows/**"
 
 jobs:
   test-compilation:
