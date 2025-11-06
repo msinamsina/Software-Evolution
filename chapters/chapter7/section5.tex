@@ -1,0 +1,50 @@
+\section{مشکلات و محدودیت‌های ابزارهای دیباگ}
+\label{sec:ch7-debug-limitations}
+
+\subsection*{محدودیت‌های فنی:}
+\begin{enumerate}
+  \item \textbf{عملکرد پایین در فایل‌های بزرگ}\\
+  بارگذاری نقشه‌های حافظه، تحلیل گراف فراخوانی/کنترل و به‌روزرسانی نماهای گرافیکی در پروژه‌های حجیم، به‌ویژه در \en{IDA} و \en{x64dbg}، موجب تأخیر محسوس، مصرف زیاد \lr{RAM} و \lr{UI} غیرپاسخ‌گو می‌شود. این مسئله در باینری‌های فشرده یا دارای تعداد زیاد \lr{DLL/so} تشدید می‌شود. \cite{sikorski2012pma,ida-docs}
+
+  \item \textbf{نیاز به سمبل‌ها}\\
+  در غیاب \lr{PDB/DWARF} یا هنگام \lr{mismatch} نسخهٔ سمبل‌ها (رایج در \en{WinDbg}) شناسایی توابع، ساختارها و بازسازی \lr{Stack-Trace} ناپایدار و خطاپذیر می‌شود. بهینه‌سازی‌های شدید کامپایلر (\lr{Inlining}/حذف \lr{Frame Pointer}) نیز مسیر قابل‌دیباگ را محو می‌کند. \cite{dang2014pre,eagle2003reversing}
+
+  \item \textbf{کرش/بی‌ثباتی در دیباگ چندریسمانی (\lr{Multi-Thread})}\\
+  وقفهٔ نرم‌افزاری (\lr{INT3}) زمان‌بندی نخ‌ها را تغییر می‌دهد؛ گاه باعث محوشدن یا ایجاد \lr{Race} می‌شود. اعمال \lr{Breakpoint} سراسری روی همهٔ نخ‌ها ممکن است \lr{Deadlock}، توقف ناخواسته یا حتی کرش ابزار را رقم بزند. هماهنگ‌سازی \lr{step-over/into} بین نخ‌ها نیز در برخی ابزارها قابل اتکا نیست. \cite{sikorski2012pma,dang2014pre}
+
+  \item \textbf{محدودیت انواع \lr{Breakpoint}}\\
+  رجیسترهای سخت‌افزاری (\lr{DR0–DR3}) تعداد محدودی \lr{Watchpoint} می‌دهند؛ \lr{Breakpoint} نرم‌افزاری بایت کد را تغییر می‌دهد و توسط ضد‌دیباگ‌ها شناسایی می‌شود؛ \lr{Page-Guard} پوشش کامل ندارد و سربار ایجاد می‌کند. \cite{sikorski2012pma,intel-sdm}
+
+  \item \textbf{قیود سطح کرنل و وابستگی به پلتفرم}\\
+  دیباگ \lr{Kernel-Mode} نیازمند دسترسی‌های ویژه، \lr{Secure-Boot} سازگار و سمبل‌های نسخه‌همخوان است؛ کوچک‌ترین عدم همخوانی، تحلیل \lr{Stack} و \lr{Context} را بی‌اعتبار می‌کند. \cite{ms-windbg,ida-docs}
+\end{enumerate}
+
+\subsection*{تکنیک‌های ضددیباگ (\lr{Anti-Debugging}) و مشکلات امنیتی:}
+\begin{enumerate}
+  \item \textbf{تشخیص دیباگر}\\
+  \lr{API}های رایج: \code{IsDebuggerPresent}, \code{CheckRemoteDebuggerPresent}, \code{NtQueryInformationProcess} (پرچم‌های \lr{ProcessDebugPort/ProcessDebugFlags})، بررسی رجیسترهای \lr{DRx}. بررسی مصنوعات: حضور پنجره/فرآیند شناخته‌شده (\en{x64dbg}, \en{IDA})، وجود هندل‌های مشکوک، نام‌گذاری \lr{Pipe/Mutex} خاص. چک یکپارچگی بایت‌ها برای شناسایی \lr{INT3}. \cite{sikorski2012pma,x64dbg-docs,intel-sdm}
+
+  \item \textbf{آنتی-\lr{Attach} و آنتی-\lr{Hook}}\\
+  استفاده از \code{CreateProcess} با فلگ‌های خاص، محافظت از نخ‌ها، تغییر \lr{ACL} روی اشیاء کرنلی، یا اختصاص‌دادن استثناها به هندلر داخلی (\lr{SEH}) برای بی‌اثر کردن وقفه‌های دیباگر. \cite{sikorski2012pma,dang2014pre,ms-windbg}
+
+  \item \textbf{آنتی-\lr{Single-Step} و زمان‌سنجی}\\
+  بررسی \lr{Trap Flag}، استفاده از \lr{RDTSC}/\lr{QueryPerformanceCounter} برای کشف تأخیر \lr{stepping}، اندازه‌گیری شکست‌های کش و شاخه‌ها. برخی برنامه‌ها با شناسایی کمترین انحراف زمانی، مسیر بدیل/بن‌بست اجرا می‌کنند. \cite{sikorski2012pma,intel-sdm,ms-qpc}
+
+  \item \textbf{کد خود-تغییر‌ده/پک‌شده (\lr{Self-modifying / Packed})}\\
+  آنپک/دیکریپت در زمان اجرا باعث می‌شود \lr{break} روی بخش‌های «قبل از گسترش کد» بی‌اثر باشد. تغییر مداوم نقشهٔ حافظه، آدرس‌ها و \lr{CRC-check}ها ممانعت اضافی ایجاد می‌کند. \cite{sikorski2012pma,collberg1997obf}
+
+  \item \textbf{سوءاستفاده از ویژگی‌های زبان/سیستم}\\
+  \lr{TLS Callbacks}، اتصالات تأخیری (\lr{delay-load})، \lr{inline syscalls}، و تکنیک‌های \lr{SEH-Obfuscation} مسیر کنترل را پنهان می‌کنند و بازسازی جریان (\lr{Control-Flow}) را دشوار می‌سازند. \cite{dang2014pre,collberg1997obf}
+
+  \item \textbf{ریسک‌های امنیتی محیط تحلیل}\\
+  اجرای نمونه‌های ناشناس (به‌خصوص بدافزار) در دیباگر ممکن است به فرار از \lr{VM}، آلودگی میزبان یا افشای شبکه منجر شود؛ پیکربندی نادرست \lr{snapshot}/ایزولیشن و پوشه‌های اشتراکی ریسک را بالا می‌برد. \cite{sikorski2012pma,dang2014pre}
+\end{enumerate}
+
+\subsection*{محدودیت‌های قانونی یا اخلاقی در استفاده از ابزار‌های خاص:}
+\textbf{مجوز و حق مؤلف} — مهندسی معکوس برای سازگاری/آموزش در برخی حوزه‌ها معافیت دارد، ولی دور زدن سازوکارهای حفاظت (\lr{DRM}/\lr{Obfuscation}) در بسیاری نظام‌های حقوقی می‌تواند نقض قانون باشد. \cite{collberg1997obf}
+
+\textbf{مالکیت داده و حریم خصوصی} — دیباگ روی داده‌های کاربران/شرکت‌ها باید با مجوز صریح، محیط ایزوله و سیاست نگهداشت انجام شود. \cite{sikorski2012pma}
+
+\textbf{ایمنی آزمایشگاه} — تحلیل بدافزار یا ابزارهای با کارکرد دوگانه بدون رویه‌های استاندارد (شبکهٔ بسته، \lr{no-internet}، \lr{snapshots}، عدم استفاده از حساب‌های اصلی) غیرمسئولانه است. \cite{sikorski2012pma}
+
+\textbf{افشای مسئولانه} — کشف آسیب‌پذیری در حین دیباگ باید طبق خطوط‌مشی افشای مسئولانه و هماهنگی با ذی‌نفعان انجام شود. \cite{dang2014pre}
