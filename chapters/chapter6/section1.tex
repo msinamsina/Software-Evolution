@@ -1,0 +1,126 @@
+فرمت \lr{Portable Executable (PE)} قالب استاندارد فایل‌های اجرایی بومی در خانواده ویندوز (شامل .exe، .dll، .sys و غیره) است. PE فرمتی است مبتنی بر COFF (\lr{Common Object File Format}) که از Unix آمده و توسط Microsoft برای سیستم‌عامل Windows تطبیق داده شد. این فرمت نحوه نگهداری هدرها، بخش‌ها و جداولی را مشخص می‌کند که لودر ویندوز برای نقشه‌برداری فایل به حافظه و اجرای صحیح آن به آن نیاز دارد. در عمل، PE معادل ELF در لینوکس و Mach-O در macOS است و در محیط‌های مبتنی بر UEFI نیز برای فایل‌های اجراپذیر کاربرد دارد. \cite{chapter6ref1}
+
+فایل‌های PE نه تنها شامل فایل‌های اجرایی با پسوند .exe هستند، بلکه بسیاری از انواع فایل‌ها از این فرمت استفاده می‌کنند. کتابخانه‌های پویا ،(.dll) ماژول‌های هسته ،(.sys) برنامه‌های کنترل پنل ،(.cpl) فایل‌های شی (\lr{Object Files}) و حتی برخی فرمت‌های دیگر از جمله فایل‌های فونت نیز از این فرمت بهره می‌برند. \cite{chapter6ref2}
+
+\section{ساختار کلی فایل PE}
+
+فایل PE دارای یک ساختار سلسله مراتبی ثابت است که با چندین هدر شروع شده و به دنبال آن جدول بخش‌ها و در نهایت محتوای واقعی بخش‌ها قرار می‌گیرند. این ساختار مجموعه‌ای از دستورالعمل‌ها را به لودر پویا (\lr{Dynamic Linker}) ارائه می‌دهد تا نحوه‌ی نقشه‌برداری صحیح فایل در حافظه را تعیین کند.\cite{chapter6ref1}
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.8\textwidth]{Portable_Executable_32_bit_Structure_in_SVG_fixed.jpg}
+\caption{شمای کلی یک فایل اجرایی قابل حمل (۳۲ بیتی)}
+\end{figure}
+
+\noindent
+فایل PE شامل قسمت‌های زیر می‌شود:
+
+\noindent
+\subsection{\lr{DOS Header}}
+هر فایل PE با هدر DOS شروع می‌شود که ساختاری به طول ۶۴ بایت است. این هدر که برای سازگاری با سیستم‌های ۱۶ بیتی MS-DOS قدیمی طراحی شده، شامل یک امضای استاندارد و یک اشاره‌گر کلیدی است.
+بایت‌های اولیه فایل همیشه شامل امضای جادویی MZ (معادل هگز \lr{0x5A4D} و نشان‌دهنده \lr{Mark Zbikowski}، یکی از توسعه‌دهندگان \lr{MS-DOS}) است که اولین نشانه‌ی شناسایی فرمت PE است.
+فیلد 4 بایتی e\_lfanew در آفست ثابت \lr{0x3C} از شروع فایل قرار دارد و شامل آفست فایل (\lr{File Offset}) شروع هدرهای NT است.\cite{chapter6ref1} برای سیستم‌عامل‌های مدرن ویندوز، مهم‌ترین وظیفه \lr{DOS Header}، ارائه این اشاره‌گر است. بارگذار ویندوز بلافاصله به این آفست مراجعه کرده و از بقیه هدر DOS و برنامه \lr{DOS Stub} صرف نظر می‌کند تا به ساختار اصلی NT دست یابد.\cite{chapter6ref1}
+
+\noindent
+\subsection{\lr{DOS Stub}}
+برنامه‌ای کوچک سازگار با \lr{MS-DOS 2.0} که صرفاً یک پیام خطا چاپ می‌کند: \lr{"This program cannot be run in DOS mode"}. این Stub اطمینان می‌دهد که اگر برنامه در محیط DOS اجرا شود، یک پیام معنادار نمایش داده شود.\cite{chapter6ref2}
+
+\noindent
+\subsection{\lr{NT Headers}}
+هدرهای \lr{NT}، که موقعیت شروع آن توسط e\_lfanew تعیین شده، اطلاعاتی درباره ماشین هدف (\lr{Target Machine}) و ویژگی‌های فایل PE دارد و شامل سه بخش متوالی است:\cite{chapter6ref2}
+
+\noindent
+1. \lr{PE Signature}: یک امضای ۴ بایتی که مقدار ثابت \lr{PE00} (\lr{0x50450000}) است که فایل را به عنوان PE شناسایی می‌کند​.\cite{chapter6ref2}
+
+\noindent
+2. \lr{COFF File Header}: هدری که اطلاعات کلی درباره فایل مانند معماری هدف (\lr{Machine Type})، تعداد بخش‌ها (NumberOfSections)، timestamp، اندازه Optional Header و Characteristics را نگهداری می‌کند​.\cite{chapter6ref2}
+\begin{itemize}
+    \setlength{\itemsep}{-0.5em}
+    \item \lr{Machine} - مشخص‌کننده معماری CPU هدف است.
+    \item \lr{NumberOfSections} - تعداد بخش‌های موجود در فایل را نشان می‌دهد.
+    \item \lr{TimeDateStamp} - زمان و تاریخ ایجاد فایل را مشخص می‌کند.
+    \item \lr{PointerToSymbolTable} - آدرس (offset) جدول نمادها است، که معمولاً مقدار آن صفر است.
+    \item \lr{NumberOfSymbols} - تعداد نمادهای موجود در جدول نمادها را مشخص می‌کند (معمولاً صفر است).
+    \item \lr{SizeOfOptionalHeader} - اندازه هدر اختیاری را نشان می‌دهد.
+    \item \lr{Characteristics} - شامل پرچم‌هایی است که ویژگی‌های فایل را مشخص می‌کنند (مثلاً فایل اجرایی، DLL و غیره).
+\end{itemize}
+
+
+\noindent
+3. \lr{Optional Header}: 
+علی‌رغم نام، برای فایل‌های PE الزامی است و شامل اطلاعات مهمی برای بارگذاری (Loading) و اجرای برنامه است. اطلاعات مهمی مانند نقطه ورود برنامه (\lr{Entry Point RVA})، \lr{ImageBase}، اطلاعات \lr{Alignment} و ... .\cite{chapter6ref2}
+\begin{itemize}
+    \setlength{\itemsep}{-0.5em}
+    \item \lr{Magic} - نوع فایل اجرایی را مشخص می‌کند (مانند \lr{PE32} با مقدار \lr{0x010B} یا \lr{PE32+} با مقدار \lr{0x020B} برای ۶۴ بیت).
+    \item \lr{MajorLinkerVersion / MinorLinkerVersion} - نسخه لینکِر (Linker) مورد استفاده را نشان می‌دهد.
+    \item \lr{SizeOfCode} - اندازه بخش کد را مشخص می‌کند.
+    \item \lr{SizeOfInitializedData} - اندازه بخش داده‌های مقداردهی‌شده را مشخص می‌کند.
+    \item \lr{AddressOfEntryPoint} - آدرس مجازی نسبی (\lr{RVA}) نقطه ورود برنامه را نشان می‌دهد.
+    \item \lr{BaseOfCode / BaseOfData} - آدرس‌های مجازی نسبی (\lr{RVA}) بخش‌های کد و داده را مشخص می‌کنند.
+    \item \lr{ImageBase} - آدرس بارگذاری ترجیحی تصویر (Image) در حافظه را مشخص می‌کند.
+    \item \lr{SectionAlignment / FileAlignment} - نحوه تراز (Alignment) بخش‌ها در حافظه و روی دیسک را تعیین می‌کند.
+    \item \lr{SizeOfImage} - اندازه کل تصویر (Image) در حافظه را نشان می‌دهد.
+    \item \lr{SizeOfHeader} - اندازه ترکیبی تمام سربرگ‌ها (Headers) را مشخص می‌کند.
+    \item \lr{Subsystem} - زیرسامانه‌ای را مشخص می‌کند که برای اجرای فایل لازم است (مثلاً رابط کاربری گرافیکی ویندوز).
+    \item \lr{DllCharacteristics} - شامل پرچم‌هایی است که ویژگی‌های فایل DLL را مشخص می‌کنند.
+    \item \lr{SizeOfStackReserve / SizeOfStackCommit} - اندازه رزرو و تعهد (Commit) پشته (Stack) را مشخص می‌کند.
+    \item \lr{SizeOfHeapReserve / SizeOfHeapCommit} - اندازه رزرو و تعهد (Commit) پشته حافظه (Heap) را مشخص می‌کند.
+    \item \lr{NumberOfRvaAndSizes} - تعداد ورودی‌های موجود در جدول آدرس‌های مجازی نسبی را نشان می‌دهد.
+\end{itemize}
+
+\noindent
+4. \lr{Data Directories}: 
+این بخش به جداول و منابع مختلفی در فایل اشاره می‌کند؛ مانند جدول واردات (\lr{Imports})، صادرات (\lr{Exports})، منابع (\lr{Resources}) و موارد دیگر.\cite{chapter6ref2}
+\begin{itemize}
+    \setlength{\itemsep}{-0.5em}
+    \item \lr{Export Table} - آدرس و اندازهٔ جدول صادرات.
+    \item \lr{Import Table} - آدرس و اندازهٔ جدول واردات.
+    \item \lr{Resource Table} - آدرس و اندازهٔ جدول منابع.
+    \item \lr{Exception Table} - آدرس و اندازهٔ جدول استثناها (Exception).
+    \item \lr{Certificate Table} - آدرس و اندازهٔ جدول گواهی امنیتی.
+    \item \lr{Base Relocation Table} - آدرس و اندازهٔ جدول بازنشانی پایه (\lr{Relocation}).
+    \item \lr{Debug Data} - آدرس و اندازهٔ داده‌های اشکال‌زدایی (\lr{Debug}).
+    \item \lr{Architecture Data} - رزرو شده؛ مقدار آن باید صفر باشد.
+    \item \lr{Global Pointer Register} - آدرس مجازی نسبی (\lr{RVA}) مقداری که در ثبات اشاره‌گر سراسری ذخیره می‌شود.
+    \item \lr{TLS Table} - آدرس و اندازهٔ جدول حافظهٔ محلی رشته‌ها (\lr{Thread-Local Storage}).
+    \item \lr{Load Configuration Table} - آدرس و اندازهٔ جدول پیکربندی بارگذاری.
+    \item \lr{Bound Import Table} - آدرس و اندازهٔ جدول واردات مقید (\lr{Bound Import}).
+    \item \lr{Import Address Table} - آدرس و اندازهٔ جدول آدرس‌های واردات.
+    \item \lr{Delay Import Descriptor} - آدرس و اندازهٔ توصیف‌گر واردات تأخیری (\lr{Delay Import}).
+    \item \lr{CLR Runtime Header} - آدرس و اندازهٔ هدر زمان‌اجرای \lr{CLR}.
+    \item \lr{Reserved} - برای استفاده‌های آینده رزرو شده است.
+\end{itemize}
+
+\noindent
+\subsection{\lr{Section Headers}}
+جدولی از هدرهای بخش (\lr{Section Headers}) که برای هر بخش در فایل یک ورودی دارد. هر \lr{Section Header} شامل نام بخش، \lr{Virtual Address}، \lr{Virtual Size}، \lr{Pointer-To-Raw-Data} و سایر metadata است.\cite{chapter6ref2}
+
+\noindent
+\subsection{\lr{Sections}}
+بخش‌های اصلی فایل که محتویات واقعی برنامه را شامل می‌شود. بخش‌های استاندارد شامل .text (کد)، .data (داده‌های مقداردهی‌شده)، .rdata (داده‌های فقط‌خوانده)، .rsrc (منابع) و دیگری هستند.\cite{chapter6ref2}
+
+
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{llll}
+        \toprule
+        \textbf{توضیح} & \textbf{حافظه} & \textbf{کاربرد اصلی} & \textbf{نام بخش} \\
+        \midrule
+        دستورالعمل‌های CPU و کد اصلی برنامه                 & R-X           & کد قابل اجرا       & .text   \\
+        متغیرهای جهانی اولیه‌شده                            & RW-           & داده مقداردهی شده  & .data   \\
+        رشته‌های ثابت و اطلاعات Import/Export               & R--            & داده فقط‌خوانده    & .rdata  \\
+        اسامی DLL‌ها و توابع وارد‌شده                        & R--           & جدول Import        & .idata  \\
+        اسامی توابع صادرشده                                & R--           & جدول Export        & .edata  \\
+        آیکن‌ها، تصاویر، رشته‌ها، \lr{Dialog}‌های رابط کاربری & R--          & منابع برنامه       & .rsrc   \\
+        آدرس‌های نیازمند بازنشانی برای ASLR                 & R--           & اطلاعات Relocation & .reloc  \\
+        جداول \lr{exception handling} (فقط ۶۴ بیت)         & R--             & اطلاعات Exception  & .pdata  \\
+        \bottomrule
+    \end{tabular}
+    \caption{بخش‌های مختلف فایل اجرایی (\lr{PE Sections}) و کاربرد آن‌ها}
+    \label{tab:pe_sections}
+\end{table}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.8\textwidth]{images/PE Headers annotated.png}
+\caption{نمونه کد باینری یک فایل PE}
+\end{figure}
