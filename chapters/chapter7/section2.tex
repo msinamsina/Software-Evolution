@@ -1,0 +1,322 @@
+\section{انواع دیباگرها: دسته‌بندی از نظر سطح کارکرد}
+	\label{section:debuggers-level}
+	
+	دیباگرها از حیث سطح دسترسی به سیستم عامل به دو دسته اصلی تقسیم می‌شوند که هر یک کاربردها و قابلیت‌های متمایزی دارند.
+	
+	\subsection{دیباگرهای حالت کاربر \lr{(User-Mode Debuggers)}}
+	\label{subsec:user-mode}
+	
+	این دسته از دیباگرها در فضای کاربر اجرا شده و تنها به منابع و \lr{process}های متعلق به کاربر دسترسی دارند.
+	
+	\subsubsection{مثال‌های کاربردی}
+	\begin{itemize}
+		\item \lr{\textbf{GDB (GNU Debugger)}}: دیباگر استاندارد برای برنامه‌های لینوکس
+		\item \lr{\textbf{WinDbg (User Mode)}}: برای دیباگ برنامه‌های ویندوزی
+		\item \lr{\textbf{LLDB}}: دیباگر مدرن برای مجموعه کامپایلر \lr{LLVM}
+		\item \lr{\textbf{Visual Studio Debugger}}: محیط یکپارچه برای برنامه‌های \lr{.NET}
+	\end{itemize}
+	
+	\subsubsection{مزایا}
+	\begin{itemize}
+		\item \textbf{امنیت بالا}: به دلیل محدودیت دسترسی به هسته سیستم عامل
+		\item \textbf{پایداری}: خطا در دیباگر باعث \lr{crash} سیستم نمی‌شود
+		\item \textbf{سهولت استفاده}: معمولاً رابط کاربری گرافیکی دارند
+		\item \textbf{قابلیت حمل}: روی سیستم‌های مختلف قابل اجرا هستند
+	\end{itemize}
+	
+	\subsubsection{معایب}
+	\begin{itemize}
+		\item \textbf{محدودیت دسترسی}: نمی‌توانند درایورها یا هسته را دیباگ کنند
+		\item \textbf{محدودیت در بررسی حافظه}: فقط به فضای حافظه \lr{process} کاربر دسترسی دارند
+		\item \textbf{عدم توانایی در تحلیل \lr{interrupt}ها}: قادر به دیباگ وقفه‌های سیستمی نیستند
+	\end{itemize}
+	
+	\subsection{دیباگرهای حالت هسته \lr{(Kernel-Mode Debuggers)}}
+	\label{subsec:kernel-mode}
+	
+	این دیباگرها با سطح دسترسی بالاتری عمل کرده و مستقیماً با هسته سیستم عامل در ارتباط هستند.
+	
+	\subsubsection{مثال‌های کاربردی}
+	\begin{itemize}
+		\item \lr{\textbf{WinDbg (Kernel Mode)}}: برای دیباگ درایورهای ویندوز
+		\item \lr{\textbf{KGDB}}: دیباگر هسته لینوکس
+		\item \lr{\textbf{SoftICE}}: دیباگر معروف برای سیستم‌های قدیمی
+	\end{itemize}
+	
+	\subsubsection{مزایا}
+	\begin{itemize}
+		\item \textbf{دسترسی کامل}: توانایی دیباگ کل سیستم شامل هسته و درایورها
+		\item \textbf{قدرت تشخیص بالا}: می‌توانند مسائل پیچیده سیستمی را تحلیل کنند
+		\item \textbf{امکان دیباگ \lr{low-level}}: قادر به دیباگ در سطح سخت‌افزار هستند
+		\item \textbf{تحلیل \lr{crash dump}}: توانایی تحلیل کامل \lr{dump}های سیستمی
+	\end{itemize}
+	
+	\subsubsection{معایب}
+	\begin{itemize}
+		\item \textbf{پیچیدگی}: نیاز به دانش عمیق از سیستم عامل و سخت‌افزار
+		\item \textbf{ریسک بالا}: خطا در دیباگر می‌تواند باعث \lr{crash} سیستم شود
+		\item \textbf{مشکلات امنیتی}: دسترسی بالا می‌تواند تهدید امنیتی ایجاد کند
+		\item \textbf{نیاز به تنظیمات خاص}: معمولاً نیاز به پیکربندی پیچیده دارند
+	\end{itemize}
+	
+	\section{دسته‌بندی دیباگرها از نظر رویکرد}
+	\label{section:debugging-approaches}
+	
+	دیباگرها از نظر رویکرد و روش دیباگ نیز به دسته‌های مختلفی تقسیم می‌شوند که هر کدام برای سناریوهای خاصی مناسب هستند.
+	
+	\subsection{دیباگرهای نمادین \lr{(Symbolic Debuggers)}}
+	\label{subsec:symbolic-debuggers}
+	
+	این دیباگرها از اطلاعات نمادین (\lr{symbol}) برای نمایش متغیرها و توابع استفاده می‌کنند.
+	
+	\subsubsection{مثال‌های کاربردی}
+	\begin{itemize}
+		\item \lr{\textbf{GDB}} با اطلاعات دیباگ: با فایل‌های \lr{DWARF/PDB}
+		\item \lr{\textbf{Visual Studio Debugger}}: با اطلاعات \lr{PDB}
+		\item \lr{\textbf{LLDB}} با اطلاعات نمادین: برای برنامه‌های \lr{C/C++}
+	\end{itemize}
+	
+	\subsubsection{مزایا}
+	\begin{itemize}
+		\item \textbf{قابلیت خوانایی بالا}: نمایش نام متغیرها و توابع به جای آدرس‌های حافظه
+		\item \textbf{عیب‌یابی سریعتر}: امکان تنظیم \lr{breakpoint} بر اساس نام توابع
+		\item \textbf{تحلیل \lr{call stack} معنادار}: نمایش نام توابع در \lr{call stack}
+		\item \textbf{پشتیبانی از \lr{source-level debugging}}: نمایش کد منبع اصلی
+	\end{itemize}
+	
+	\subsubsection{معایب}
+	\begin{itemize}
+		\item \textbf{نیاز به اطلاعات دیباگ}: وابستگی به فایل‌های سمبول
+		\item \textbf{افزایش حجم برنامه}: اطلاعات دیباگ فضای اضافی مصرف می‌کنند
+		\item \textbf{مشکلات امنیتی}: اطلاعات دیباگ می‌تواند برای مهاجمان مفید باشد
+	\end{itemize}
+	
+	\subsection{دیباگرهای ریموت \lr{(Remote Debuggers)}}
+	\label{subsec:remote-debuggers}
+	
+	این دیباگرها امکان دیباگ برنامه را روی سیستم دیگری فراهم می‌کنند.
+	
+	\subsubsection{مثال‌های کاربردی}
+	\begin{itemize}
+		\item \lr{\textbf{GDBServer}}: برای دیباگ ریموت برنامه‌های لینوکس
+		\item \lr{\textbf{Visual Studio Remote Debugger}}: برای دیباگ برنامه‌های ویندوزی
+		\item \lr{\textbf{Android Studio Debugger}}: برای دیباگ اپلیکیشن‌های اندروید
+	\end{itemize}
+	
+	\subsubsection{مزایا}
+	\begin{itemize}
+		\item \textbf{دیباگ در محیط واقعی}: امکان دیباگ روی دستگاه هدف
+		\item \textbf{عدم تأثیر بر عملکرد}: دیباگر روی سیستم جداگانه اجرا می‌شود
+		\item \textbf{امنیت更高}: دیباگ سیستم‌های \lr{production} بدون نصب ابزار روی آنها
+		\item \textbf{پشتیبانی از \lr{embedded systems}}: برای دیباگ سیستم‌های توکار
+	\end{itemize}
+	
+	\subsubsection{معایب}
+	\begin{itemize}
+		\item \textbf{پیچیدگی تنظیمات}: نیاز به پیکربندی شبکه و ارتباط
+		\item \textbf{مشکلات تأخیر}: تأخیر شبکه می‌تواند بر تجربه دیباگ تأثیر بگذارد
+		\item \textbf{مشکلات اتصال}: قطعی شبکه می‌تواند فرآیند دیباگ را مختل کند
+	\end{itemize}
+	
+	\subsection{دیباگرهای سخت‌افزاری و \lr{Assisted-Hardware}}
+	\label{subsec:hardware-debuggers}
+	
+	این دیباگرها از قابلیت‌های سخت‌افزاری خاص برای دیباگ استفاده می‌کنند.
+	
+	\subsubsection{مثال‌های کاربردی}
+	\begin{itemize}
+		\item \lr{\textbf{JTAG Debuggers}}: برای دیباگ پردازنده‌های \lr{embedded}
+		\item \lr{\textbf{In-Circuit Emulators (ICE)}}: شبیه‌سازهای سخت‌افزاری
+		\item \lr{\textbf{ARM DSTREAM}}: دیباگر سخت‌افزاری برای پردازنده‌های \lr{ARM}
+	\end{itemize}
+	
+	\subsubsection{مزایا}
+	\begin{itemize}
+		\item \textbf{دسترسی سطح پایین}: امکان دیباگ در سطح رجیسترهای پردازنده
+		\item \textbf{دیباگ \lr{real-time}}: بدون تأثیر بر \lr{timing} برنامه
+		\item \textbf{قابلیت \lr{trace} کردن}: ثبت اجرای دستورات به صورت \lr{real-time}
+		\item \textbf{امکان دیباگ \lr{boot code}}: دیباگ کدهای قبل از راه‌اندازی سیستم
+	\end{itemize}
+	
+	\subsubsection{معایب}
+	\begin{itemize}
+		\item \textbf{هزینه بالا}: تجهیزات سخت‌افزاری گران‌قیمت
+		\item \textbf{پیچیدگی فنی}: نیاز به تخصص سخت‌افزاری
+		\item \textbf{محدودیت حمل}: تجهیزات معمولاً قابل حمل نیستند
+	\end{itemize}
+	
+	\subsection{دیباگرهای سخت‌افزاری در مقابل دیباگرهای نرم‌افزاری}
+	\label{subsec:hardware-vs-software}
+	
+	این دسته‌بندی به ابزارهای مورد استفاده برای دیباگ اشاره دارد که هر کدام مزایا و محدودیت‌های خاص خود را دارند.
+	
+	\subsection{دیباگرهای نرم‌افزاری \lr{(Software Debuggers)}}
+	این دیباگرها کاملاً مبتنی بر نرم‌افزار بوده و از قابلیت‌های سیستم عامل و خود برنامه برای دیباگ استفاده می‌کنند.
+	
+	\subsubsection{مثال‌های کاربردی}
+	\begin{itemize}
+		\item \lr{\textbf{Visual Studio Debugger}}: برای برنامه‌های \lr{.NET} و \lr{C++}
+		\item \lr{\textbf{GDB/LLDB}}: برای برنامه‌های لینوکس و \lr{macOS}
+		\item \lr{\textbf{Eclipse Debugger}}: برای برنامه‌های جاوا
+		\item \lr{\textbf{Chrome DevTools}}: برای دیباگ برنامه‌های وب
+	\end{itemize}
+	
+	\subsubsection{مزایا}
+	\begin{itemize}
+		\item \textbf{هزینه پایین}: معمولاً رایگان یا کم‌هزینه هستند
+		\item \textbf{دسترسی آسان}: به راحتی قابل دانلود و نصب هستند
+		\item \textbf{یادگیری آسان}: رابط کاربری معمولاً ساده‌تر است
+		\item \textbf{انعطاف‌پذیری}: قابلیت سفارشی‌سازی و توسعه دارند
+	\end{itemize}
+	
+	\subsubsection{معایب}
+	\begin{itemize}
+		\item \textbf{محدودیت در دسترسی}: نمی‌توانند به سطوح پایین سخت‌افزار دسترسی پیدا کنند
+		\item \textbf{تأثیر بر عملکرد}: ممکن است بر عملکرد برنامه تأثیر بگذارند
+		\item \textbf{محدودیت در \lr{real-time debugging}}: برای سیستم‌های بلادرنگ مناسب نیستند
+	\end{itemize}
+	
+	\subsection{دیباگرهای سخت‌افزاری \lr{(Hardware Debuggers)}}
+	این دیباگرها از تجهیزات سخت‌افزاری خاص برای نظارت و کنترل اجرای برنامه استفاده می‌کنند.
+	
+	\subsubsection{مثال‌های کاربردی}
+	\begin{itemize}
+		\item \lr{\textbf{JTAG Probes}}: برای دیباگ میکروکنترلرها
+		\item \lr{\textbf{Logic Analyzers}}: برای تحلیل سیگنال‌های دیجیتال
+		\item \lr{\textbf{In-Circuit Emulators}}: برای شبیه‌سازی سخت‌افزار
+		\item \lr{\textbf{ARM DSTREAM/ULINK}}: برای پردازنده‌های \lr{ARM}
+	\end{itemize}
+	
+	\subsubsection{مزایا}
+	\begin{itemize}
+		\item \textbf{دسترسی کامل}: امکان مشاهده وضعیت واقعی سخت‌افزار
+		\item \textbf{دیباگ غیرتهاجمی}: بدون تأثیر بر \lr{timing} برنامه
+		\item \textbf{قابلیت \lr{trace} پیشرفته}: ثبت اجرای دستورات در حافظه داخلی
+		\item \textbf{امکان دیباگ \lr{boot code}}: دیباگ از اولین دستورات پردازنده
+	\end{itemize}
+	
+	\subsubsection{معایب}
+	\begin{itemize}
+		\item \textbf{هزینه بسیار بالا}: تجهیزات معمولاً گران‌قیمت هستند
+		\item \textbf{پیچیدگی فنی}: نیاز به تخصص سخت‌افزاری پیشرفته
+		\item \textbf{محدودیت \lr{portability}}: تجهیزات معمولاً سنگین و غیرقابل حمل هستند
+	\end{itemize}
+	
+	\section{جداول مقایسه‌ای انواع دیباگرها}
+	\label{section:debugger-comparison}
+	
+	در این بخش به مقایسه سیستماتیک انواع دیباگرها در قالب جداول مقایسه‌ای می‌پردازیم.
+	
+	\subsection{مقایسه دیباگرهای حالت کاربر و حالت هسته}
+	
+	\begin{table}[!htbp]
+		\centering
+		\caption{مقایسه دیباگرهای حالت کاربر و حالت هسته}
+		\label{table:user-kernel-comparison}
+		\begin{tabular}{|p{0.2\textwidth}|p{0.35\textwidth}|p{0.35\textwidth}|}
+			\hline
+			\textbf{معیار} & \textbf{دیباگر حالت کاربر} & \textbf{دیباگر حالت هسته} \\
+			\hline
+			سطح دسترسی & فضای کاربر & هسته سیستم عامل \\
+			\hline
+			امنیت & بالا - دسترسی محدود به منابع سیستم & پایین - دسترسی کامل به سیستم \\
+			\hline
+			پایداری & بالا - خطا باعث کرش سیستم نمی‌شود & پایین - خطا باعث کرش کامل سیستم می‌شود \\
+			\hline
+			میزان پیچیدگی & کم - مناسب برای برنامه‌نویسان & زیاد - نیاز به دانش سیستم عامل \\
+			\hline
+			کاربرد اصلی & برنامه‌های کاربردی عادی & درایورها و سرویس‌های سیستمی \\
+			\hline
+			مثال‌ها & \lr{GDB, Visual Studio Debugger} & \lr{WinDbg Kernel, KGDB} \\
+			\hline
+			نیاز به تخصص & برنامه‌نویسی سطح کاربر & برنامه‌نویسی و آشنایی با هسته \\
+			\hline
+		\end{tabular}
+	\end{table}
+	
+	\subsection{مقایسه دیباگرهای نمادین و غیرنمادین}
+	
+	\begin{table}[!htbp]
+		\centering
+		\caption{مقایسه دیباگرهای نمادین و غیرنمادین}
+		\label{table:symbolic-non-symbolic-comparison}
+		\begin{tabular}{|p{0.2\textwidth}|p{0.35\textwidth}|p{0.35\textwidth}|}
+			\hline
+			\textbf{معیار} & \textbf{دیباگر نمادین} & \textbf{دیباگر غیرنمادین} \\
+			\hline
+			نمایش اطلاعات & نام متغیرها و توابع & آدرس‌های حافظه \\
+			\hline
+			قابلیت خوانایی & بالا - درک آسان اطلاعات & پایین - نیاز به تفسیر آدرس‌ها \\
+			\hline
+			نیاز به فایل دیباگ & دارد - نیاز به فایل \lr{PDB/DWARF} & ندارد - مستقل از اطلاعات دیباگ \\
+			\hline
+			حجم برنامه & بیشتر - به دلیل اطلاعات دیباگ & کمتر - بدون اطلاعات اضافی \\
+			\hline
+			امنیت اطلاعات & پایین - امکان نشت اطلاعات برنامه & بالا - محافظت از ساختار برنامه \\
+			\hline
+			سرعت دیباگ & سریع‌تر - دسترسی مستقیم به سمبول‌ها & کندتر - نیاز به تحلیل حافظه \\
+			\hline
+			مثال‌ها & \lr{GDB} با سمبول، \lr{VS Debugger} & \lr{GDB} بدون سمبول، \lr{WinDbg} بدون \lr{PDB} \\
+			\hline
+			کاربرد & توسعه و تست & آنالیز برنامه‌های \lr{Production} \\
+			\hline
+		\end{tabular}
+	\end{table}
+	
+	\subsection{مقایسه دیباگرهای ریموت و لوکال}
+	
+	\begin{table}[!htbp]
+		\centering
+		\caption{مقایسه دیباگرهای ریموت و لوکال}
+		\label{table:remote-local-comparison}
+		\begin{tabular}{|p{0.2\textwidth}|p{0.35\textwidth}|p{0.35\textwidth}|}
+			\hline
+			\textbf{معیار} & \textbf{دیباگر ریموت} & \textbf{دیباگر لوکال} \\
+			\hline
+			محل اجرای دیباگر & سیستم جداگانه & همان سیستم برنامه \\
+			\hline
+			تأثیر بر عملکرد & کم - منابع سیستم هدف کم مصرف می‌شود & زیاد - مصرف منابع سیستم اصلی \\
+			\hline
+			امنیت & بالا - مناسب برای سیستم‌های \lr{Production} & پایین - خطر برای سیستم اصلی \\
+			\hline
+			پیچیدگی تنظیمات & زیاد - نیاز به پیکربندی شبکه & کم - راه‌اندازی سریع \\
+			\hline
+			مشکلات شبکه & دارد - وابسته به اتصال شبکه & ندارد - مستقل از شبکه \\
+			\hline
+			کاربرد اصلی & سیستم‌های \lr{Production}، \lr{Embedded} & توسعه محلی و تست‌های اولیه \\
+			\hline
+			مثال‌ها & \lr{GDBServer, VS Remote Debugger} & \lr{GDB} محلی, \lr{VS Debugger} محلی \\
+			\hline
+		\end{tabular}
+	\end{table}
+	
+	\subsection{مقایسه دیباگرهای سخت‌افزاری و نرم‌افزاری}
+	
+	\begin{table}[!htbp]
+		\centering
+		\caption{مقایسه دیباگرهای سخت‌افزاری و نرم‌افزاری}
+		\label{table:hardware-software-comparison}
+		\begin{tabular}{|p{0.2\textwidth}|p{0.35\textwidth}|p{0.35\textwidth}|}
+			\hline
+			\textbf{معیار} & \textbf{دیباگر سخت‌افزاری} & \textbf{دیباگر نرم‌افزاری} \\
+			\hline
+			هزینه & بسیار بالا - تجهیزات گران‌قیمت & کم تا متوسط - معمولاً رایگان \\
+			\hline
+			زمان راه‌اندازی & کند و پیچیده - نصب و تنظیم طولانی & سریع - نصب و اجرای آسان \\
+			\hline
+			میزان دسترسی & دسترسی کامل به سخت‌افزار & محدود به فضای کاربر/هسته \\
+			\hline
+			تأثیر بر عملکرد & غیرتهاجمی - بدون تأثیر بر \lr{timing} & ممکن است تأثیر بگذارد \\
+			\hline
+			قابلیت \lr{Trace} & پیشرفته - ثبت دقیق اجرای دستورات & محدود - وابسته به قابلیت‌های نرم‌افزار \\
+			\hline
+			کاربرد اصلی & سیستم‌های توکار و درایورها & برنامه‌های کاربردی \\
+			\hline
+			نیاز به تخصص & سخت‌افزار و الکترونیک پیشرفته & برنامه‌نویسی \\
+			\hline
+			مثال‌ها & \lr{JTAG, ICE, Logic Analyzer} & \lr{GDB, Visual Studio, LLDB} \\
+			\hline
+			قابلیت حمل & معمولاً کم - تجهیزات سنگین & بالا - نرم‌افزار قابل حمل \\
+			\hline
+		\end{tabular}
+	\end{table}
