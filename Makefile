@@ -22,7 +22,7 @@ build-image:
 all: build-image
 	@echo "کامپایل کامل با مراجع..."
 	docker run --rm -v "$$(pwd):/work" $(IMAGE_NAME) xelatex -interaction=nonstopmode $(MAIN_FILE).tex
-	docker run --rm -v "$$(pwd):/work" $(IMAGE_NAME) bibtex $(MAIN_FILE) || true
+	docker run --rm -v "$$(pwd):/work" $(IMAGE_NAME) biber $(MAIN_FILE) || true
 	docker run --rm -v "$$(pwd):/work" $(IMAGE_NAME) xelatex -interaction=nonstopmode $(MAIN_FILE).tex
 	docker run --rm -v "$$(pwd):/work" $(IMAGE_NAME) xelatex -interaction=nonstopmode $(MAIN_FILE).tex
 	@echo "✓ کامپایل با موفقیت انجام شد!"

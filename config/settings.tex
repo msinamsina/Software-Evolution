@@ -16,6 +16,23 @@
     UprightFont=*-Regular
 ]{Vazirmatn}
 
+\setlatintextfont[
+    Path=/usr/share/fonts/truetype/farsi/fonts/ttf/,
+    Extension=.ttf,
+    UprightFont=*-Regular
+]{Vazirmatn}
+
+% اضافه کردن منبع بیبلیوگرافی
+\addbibresource{backmatter/references.bib}
+
+% تنظیم جهت متن برای منابع انگلیسی (چپ به راست)
+\defbibheading{bibliography}[\bibname]{%
+  \chapter*{#1}%
+  \markboth{#1}{#1}%
+}
+
+% تنظیمات اضافی برای نمایش صحیح منابع انگلیسی
+\renewcommand*{\bibfont}{\LTR\latinfont}
 
 % ============================================
 % تنظیمات هایپرلینک
@@ -40,12 +57,11 @@
 
 \pagestyle{fancy}
 \fancyhf{}
-\fancyhead[R]{\rightmark}
-\fancyhead[L]{\leftmark}
+\fancyhead[R]{\leftmark}
 \fancyfoot[C]{\thepage}
 
 % حذف خط افقی در هدر و فوتر
-\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrulewidth}{4.4pt}
 \renewcommand{\footrulewidth}{0pt}
 
 % ============================================
