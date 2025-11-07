@@ -28,31 +28,8 @@ jobs:
       - name: Setup Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Build LaTeX Docker image
-        run: |
-          docker build -t persian-latex .
-
-      - name: Compile LaTeX document
-        run: |
-          echo "Starting LaTeX compilation..."
-
-          # First XeLaTeX run
-          echo "Running XeLaTeX (1st pass)..."
-          docker run --rm -v "$(pwd):/work" persian-latex xelatex -interaction=nonstopmode main.tex
-
-          # BibTeX for references
-          echo "Running BibTeX..."
-          docker run --rm -v "$(pwd):/work" persian-latex bibtex main || true
-
-          # Second XeLaTeX run
-          echo "Running XeLaTeX (2nd pass)..."
-          docker run --rm -v "$(pwd):/work" persian-latex xelatex -interaction=nonstopmode main.tex
-
-          # Third XeLaTeX run for final cross-references
-          echo "Running XeLaTeX (3rd pass)..."
-          docker run --rm -v "$(pwd):/work" persian-latex xelatex -interaction=nonstopmode main.tex
-
-          echo "LaTeX compilation completed!"
+      - name: Build and compile LaTeX document
+        run: make all
 
       - name: Check PDF generation
         run: |
