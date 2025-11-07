@@ -22,6 +22,17 @@
     UprightFont=*-Regular
 ]{Vazirmatn}
 
+% اضافه کردن منبع بیبلیوگرافی
+\addbibresource{backmatter/references.bib}
+
+% تنظیم جهت متن برای منابع انگلیسی (چپ به راست)
+\defbibheading{bibliography}[\bibname]{%
+  \chapter*{#1}%
+  \markboth{#1}{#1}%
+}
+
+% تنظیمات اضافی برای نمایش صحیح منابع انگلیسی
+\renewcommand*{\bibfont}{\LTR\latinfont}
 
 % ============================================
 % تنظیمات هایپرلینک
