@@ -1,16 +1,16 @@
 
 
-\title{«فرق بین Virtual address و raw-address»}
+\section{«فرق بین Virtual address و raw-address»}
 
 
-\begin{document}
 
-\maketitle
 
-\section*{Virtual Address (آدرس مجازی)}
+
+
+\section{Virtual Address (آدرس مجازی)}
 
 آدرس مجازی آدرسی است که برنامه یا نرم‌افزار آن را می‌بیند و استفاده می‌کند، اما خودش مستقلاً به حافظه دسترسی ندارد. در واقع، سیستم‌عامل و واحد مدیریت حافظه (MMU -- Memory Management Unit) این آدرس‌ها را به آدرس واقعی در حافظه فیزیکی (Physical Address یا Raw Address) ترجمه می‌کنند. این مکانیزم مزیت‌های متعددی دارد: هر برنامه تصور می‌کند که یک فضای حافظه مستقل در اختیار دارد، در حالی که همه برنامه‌ها از یک حافظه فیزیکی مشترک استفاده می‌کنند. علاوه بر این، وقتی برنامه‌ای از یک Virtual Address استفاده می‌کند، MMU آن را به آدرس واقعی تبدیل می‌کند تا داده مربوطه خوانده یا نوشته شود. چنین سیستمی امکان اجرای همزمان چند برنامه بدون تداخل و با حفظ امنیت حافظه را فراهم می‌کند.
-\subsection*{مثال کد Virtual Address}
+\subsection{مثال کد Virtual Address}
 
 
 \begin{lstlisting}[language=C, caption={مثالی از Virtual Address در برنامه C}, basicstyle=\ttfamily, keywordstyle=\color{blue}, commentstyle=\color{gray}]
@@ -36,12 +36,12 @@ Address of x: 0x7ffee4b2a98c
 این آدرس چاپ شده، یک Virtual Address است که برنامه می‌بینم. سیستم‌عامل و MMU آن را به یک آدرس واقعی در RAM نگاشت می‌کنند.
 
 
-\section*{Raw Address (آدرس خام یا واقعی)}
+\section{Raw Address (آدرس خام یا واقعی)}
 
 
 آدرس خام یا واقعی، آدرسی است که به‌صورت مستقیم در حافظه فیزیکی یا در فایل باینری وجود دارد. برخلاف آدرس مجازی، هیچ ترجمه یا نگاشت مجازی برای آن انجام نمی‌شود. این نوع آدرس معمولاً در سطح سخت‌افزار یا هنگام تحلیل و دیباگ فایل‌های اجرایی (مانند استفاده از hex editor یا linker) کاربرد دارد. آدرس‌های خام ثابت هستند و موقعیت داده‌ها در فایل یا حافظه فیزیکی تغییر نمی‌کند.
 
-\subsection*{مثال Raw Address}
+\subsection{مثال Raw Address}
 
 
 فرض کنید یک فایل اجرایی ساده داریم که شامل متغیر داده‌ای زیر است:
@@ -183,25 +183,25 @@ globalVar & 0x810 \\
 \section{اهمیت}
 RVA اساس کار دی‌کامپایلرها، دیباگرها و ابزارهای مهندسی معکوس است و کمک می‌کند بخش‌های مختلف فایل PE را در حافظه یا روی دیسک به درستی پیدا کنیم.
 
-\section*{ دیاگرام نگاشت فایل‌ها در حافظه و دیسک}
+\section{ دیاگرام نگاشت فایل‌ها در حافظه و دیسک}
 
-\subsection*{File on Disk (فایل روی دیسک)}
+\subsection{File on Disk (فایل روی دیسک)}
 داده‌ها روی دیسک به بلوک‌ها (Blocks / Sectors) تقسیم شده‌اند.  
 هر بلوک اندازه مشخصی دارد (مثلاً 4 کیلوبایت).
 
-\subsection*{RAM / Memory (حافظه اصلی)}
+\subsection{RAM / Memory (حافظه اصلی)}
 بلوک‌ها هنگام دسترسی به برنامه، در Buffer یا Page در حافظه بارگذاری می‌شوند.  
 اگر از Memory-mapped file استفاده شود، بلوک‌ها مستقیماً روی فضای آدرس برنامه نگاشت می‌شوند.
 
-\subsection*{File System Cache / Page Cache}
+\subsection{File System Cache / Page Cache}
 سیستم‌عامل اغلب داده‌ها را در کش حافظه ذخیره می‌کند تا دفعات بعد نیاز به خواندن از دیسک نباشد.  
 به این ترتیب خواندن و نوشتن سریع‌تر می‌شود.
 
-\subsection*{CPU Access}
+\subsection{CPU Access}
 برنامه به Buffer یا Memory-mapped Page دسترسی دارد و می‌تواند داده‌ها را بخواند یا تغییر دهد.  
 در حالت Memory-mapped, تغییر داده در حافظه می‌تواند مستقیماً روی دیسک هم منعکس شود.
 
-\subsection*{نکات مهم}
+\subsection{نکات مهم}
 \begin{itemize}
     \item \textbf{تفاوت Buffered I/O و Memory-mapped:}  
     Buffered I/O: داده‌ها بلوک‌بلوک از دیسک خوانده و نوشته می‌شوند، با کنترل بیشتر روی I/O.  
@@ -212,7 +212,7 @@ RVA اساس کار دی‌کامپایلرها، دیباگرها و ابزار
     نگاشت صفحه‌ها و بلوک‌ها توسط سیستم‌عامل مدیریت می‌شود.
 \end{itemize}
 
-\subsection*{دیاگرام نگاشت فایل به حافظه}
+\subsection{دیاگرام نگاشت فایل به حافظه}
 
 \begin{center}
 \begin{tikzpicture}[>=stealth', node distance=2.5cm, auto]
@@ -241,5 +241,4 @@ RVA اساس کار دی‌کامپایلرها، دیباگرها و ابزار
 \end{center}
 
 
-\end{document}
-\end{document}
+
