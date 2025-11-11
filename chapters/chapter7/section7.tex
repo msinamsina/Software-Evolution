@@ -1,15 +1,15 @@
-\section*{7.7 نمونهٔ هک (مطالعهٔ موردی — شرح فنی و نحوهٔ کشف)}
+\section{7.7 نمونهٔ هک (مطالعهٔ موردی — شرح فنی و نحوهٔ کشف)}
 \addcontentsline{toc}{section}{7.7 نمونهٔ هک (مطالعهٔ موردی — شرح فنی و نحوهٔ کشف)}
 در این مطالعهٔ موردی، یک حملهٔ واقعی/شبیه‌سازی‌شده به‌صورت مرحله‌ای شرح داده می‌شود؛ تمرکز بر جزئیات فنی، چگونگی بهره‌برداری، و نحوهٔ کشف و تحلیل با ابزارهای دیباگ است.
 
-\subsection*{سناریو و پیش‌نیازها}
+\subsection{سناریو و پیش‌نیازها}
 \begin{itemize}
   \item برنامه: یک REST API نوشته‌شده در جاوا که عملیات سریال‌سازی/دسریال‌سازی اشیا را انجام می‌دهد (مثلاً برای ذخیرهٔ سِشن یا ارسالِ پیام بین سرویس‌ها).
   \item محیط: Tomcat روی لینوکس، نسخهٔ قدیمیِ commons-collections در classpath، لاگِ سطح INFO موجود.
   \item ابزار مهاجم: ysoserial برای تولید gadget chain، netcat/curl برای ارسال payload، و یک سرور کنترل برای دریافت callback (outbound).
 \end{itemize}
 
-\subsection*{شرح مرحله‌به‌مرحلهٔ حمله}
+\subsection{شرح مرحله‌به‌مرحلهٔ حمله}
 \begin{enumerate}
   \item 	extbf{شناسایی نقطهٔ ورودی:} مهاجم یک endpoint را که پارامتر cookie یا فیلدِ POST با محتوای باینری می‌پذیرد، شناسایی می‌کند.
   \item 	extbf{ساخت Payload:} با استفاده از ysoserial و یک gadget chain شناخته‌شده برای نسخهٔ آسیب‌پذیرِ commons-collections، payload تولید می‌شود که فرمانِ شل اجرا کند (مثلاً ایجاد یک reverse shell به 10.0.0.7:4444).
@@ -25,7 +25,7 @@
   \item 	extbf{اجرای حمله و بهره‌برداری:} سرور payload را دسریالایز می‌کند؛ gadget chain موجب اجرای همان دستورِ تنظیم‌شده می‌شود و مهاجم دسترسیِ تعاملی به شل به‌دست می‌آورد.
 \end{enumerate}
 
-\subsection*{چگونگیِ آشکارسازی توسط ابزارها}
+\subsection{چگونگیِ آشکارسازی توسط ابزارها}
 \paragraph{1. DAST (Burp Suite + fuzzer):}
 \begin{itemize}
   \item Burp Intruder با مجموعه‌ای از payloadهای باینری (نسخۀ ysoserial) به endpoint ارسال می‌کند؛ رفتار غیرعادی مانند افزایش زمان پاسخ یا بازشدن اتصال خروجی دیده می‌شود.
@@ -45,7 +45,7 @@
   \item در سطح سیستم‌عامل، با strace یا auditd می‌توان خروجی‌های فراخوانی سیستم مانند fork/exec را دید که تأیید می‌کند یک فرایند جدید ایجاد شده است.
 \end{itemize}
 
-\subsection*{نمونهٔ لاگِ تحلیلی (توضیحی)}
+\subsection{نمونهٔ لاگِ تحلیلی (توضیحی)}
 \begin{lstlisting}
 [INFO] Received serialized payload, length=512
 [WARN] Deserialization of untrusted data detected: class=org.apache.commons.collections.functors.InvokerTransformer
@@ -53,7 +53,7 @@
 [DEBUG] Stack trace (attached): java.lang.RuntimeException: ... -> org.apache.commons.collections...
 \end{lstlisting}
 
-\subsection*{تجزیه و تحلیل فورنزیک و راهبردِ پاسخ}
+\subsection{تجزیه و تحلیل فورنزیک و راهبردِ پاسخ}
 \begin{itemize}
   \item 	extbf{ایزوله‌سازی سریع:} جداسازی سرویس از شبکه جهت جلوگیری از پخش آسیب.
   \item 	extbf{جمع‌آوری شواهد:} ذخیرهٔ core dump، لاگ‌های JVM، فهرستِ کلاس‌های بارگذاری‌شده و snapshot از حافظه JVM.
@@ -61,7 +61,7 @@
   \item 	extbf{تست مجدد:} اجرای فازیینگ و اسکن‌های DAST روی محیط آپدیت‌شده برای تأیید رفع آسیب.
 \end{itemize}
 
-\subsection*{درس‌های آموخته‌شده}
+\subsection{درس‌های آموخته‌شده}
 \begin{itemize}
   \item دسریالایز کردن اشیاء از ورودیِ غیرمطمئن ریسک بالایی دارد؛ در صورت نیاز، از فرمت‌های متنی امن و whitelist کلاس‌ها استفاده کنید.
   \item ترکیب لاگِ غنی، مانیتورینگِ شبکه و تست داینامیک شانس کشف زودهنگام را افزایش می‌دهد.
@@ -74,7 +74,7 @@
 
 ترکیب ابزارهای استاتیک و داینامیک، همراهِ فازیینگ و مانیتورینگ زمانِ اجرا، بهترین رویکرد برای کاهش ریسک است. رفع کاملِ مشکلات در همهٔ شرایط عملی نیست، بنابراین هدف باید حرکت به سمت کاهش ریسک و افزایش سرعت کشف و پاسخ باشد.
 
-\section*{ضمیمه: مثال‌هایی از قواعد Semgrep / Snippet}
+\section{ضمیمه: مثال‌هایی از قواعد Semgrep / Snippet}
 \begin{lstlisting}[language=Java]
 // Semgrep rule (simplified)
 // look for use of readObject without validation
