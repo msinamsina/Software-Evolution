@@ -1,18 +1,22 @@
 \chapter{فایل های PE}
+
+
+فرمت \lr{Portable Executable (PE)} قالب استاندارد فایل‌های اجرایی بومی در خانواده ویندوز (شامل .exe، .dll، .sys و غیره) است. PE فرمتی است مبتنی بر COFF (\lr{Common Object File Format}) که از Unix آمده و توسط Microsoft برای سیستم‌عامل Windows تطبیق داده شد. این فرمت نحوه نگهداری هدرها، بخش‌ها و جداولی را مشخص می‌کند که لودر ویندوز برای نقشه‌برداری فایل به حافظه و اجرای صحیح آن به آن نیاز دارد. در عمل، PE معادل ELF در لینوکس و Mach-O در macOS است و در محیط‌های مبتنی بر UEFI نیز برای فایل‌های اجراپذیر کاربرد دارد. \cite{chapter6ref1}
+
+فایل‌های PE نه تنها شامل فایل‌های اجرایی با پسوند .exe هستند، بلکه بسیاری از انواع فایل‌ها از این فرمت استفاده می‌کنند. کتابخانه‌های پویا ،(.dll) ماژول‌های هسته ،(.sys) برنامه‌های کنترل پنل ،(.cpl) فایل‌های شی (\lr{Object Files}) و حتی برخی فرمت‌های دیگر از جمله فایل‌های فونت نیز از این فرمت بهره می‌برند. \cite{chapter6ref2}
+
+
+\label{sec:ch6-sec1}
 \input{chapters/chapter6/section1}
 
-\section{هربخش فایل PE چه اطلاعاتی دارد}
 \label{sec:ch6-2-Pe}
 \input{chapters/chapter6/section2}
 
-
-
-\section{تفاوت آدرس و آفست}
-\label{sec:section3}
-
-\section{هر بخش از فایل PE چه مزایایی دارد و چه اطلاعاتی را در خود ذخیره می‌کند؟}
 \label{sec:ch6-sec3}
 \input{chapters/chapter6/section3}
 
+\label{sec:ch6-sec4}
+\input{chapters/chapter6/section4}
 
+\label{sec:ch6-sec5}
 \input{chapters/chapter6/section5}

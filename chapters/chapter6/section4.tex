@@ -1,7 +1,7 @@
 \section{«فرق بین Virtual address و raw-address»}
 
 
-\section{Virtual Address (آدرس مجازی)}
+\subsection{Virtual Address (آدرس مجازی)}
 
 آدرس مجازی آدرسی است که برنامه یا نرم‌افزار آن را می‌بیند و استفاده می‌کند، اما خودش مستقلاً به حافظه دسترسی ندارد. در واقع، سیستم‌عامل و واحد مدیریت حافظه (MMU -- Memory Management Unit) این آدرس‌ها را به آدرس واقعی در حافظه فیزیکی (Physical Address یا Raw Address) ترجمه می‌کنند. این مکانیزم مزیت‌های متعددی دارد: هر برنامه تصور می‌کند که یک فضای حافظه مستقل در اختیار دارد، در حالی که همه برنامه‌ها از یک حافظه فیزیکی مشترک استفاده می‌کنند. علاوه بر این، وقتی برنامه‌ای از یک Virtual Address استفاده می‌کند، MMU آن را به آدرس واقعی تبدیل می‌کند تا داده مربوطه خوانده یا نوشته شود. چنین سیستمی امکان اجرای همزمان چند برنامه بدون تداخل و با حفظ امنیت حافظه را فراهم می‌کند.
 \subsection{مثال کد Virtual Address}
@@ -30,7 +30,7 @@ Address of x: 0x7ffee4b2a98c
 این آدرس چاپ شده، یک Virtual Address است که برنامه می‌بینم. سیستم‌عامل و MMU آن را به یک آدرس واقعی در RAM نگاشت می‌کنند.
 
 
-\section{Raw Address (آدرس خام یا واقعی)}
+\subsection{Raw Address (آدرس خام یا واقعی)}
 
 
 آدرس خام یا واقعی، آدرسی است که به‌صورت مستقیم در حافظه فیزیکی یا در فایل باینری وجود دارد. برخلاف آدرس مجازی، هیچ ترجمه یا نگاشت مجازی برای آن انجام نمی‌شود. این نوع آدرس معمولاً در سطح سخت‌افزار یا هنگام تحلیل و دیباگ فایل‌های اجرایی (مانند استفاده از hex editor یا linker) کاربرد دارد. آدرس‌های خام ثابت هستند و موقعیت داده‌ها در فایل یا حافظه فیزیکی تغییر نمی‌کند.
@@ -174,10 +174,10 @@ globalVar & 0x810 \\
 \end{tikzpicture}
 
 
-\section{اهمیت}
+\subsection{اهمیت}
 RVA اساس کار دی‌کامپایلرها، دیباگرها و ابزارهای مهندسی معکوس است و کمک می‌کند بخش‌های مختلف فایل PE را در حافظه یا روی دیسک به درستی پیدا کنیم.
 
-\section{ دیاگرام نگاشت فایل‌ها در حافظه و دیسک}
+\subsection{ دیاگرام نگاشت فایل‌ها در حافظه و دیسک}
 
 \subsection{File on Disk (فایل روی دیسک)}
 داده‌ها روی دیسک به بلوک‌ها (Blocks / Sectors) تقسیم شده‌اند.  
@@ -206,30 +206,30 @@ RVA اساس کار دی‌کامپایلرها، دیباگرها و ابزار
     نگاشت صفحه‌ها و بلوک‌ها توسط سیستم‌عامل مدیریت می‌شود.
 \end{itemize}
 
-\subsection{دیاگرام نگاشت فایل به حافظه}
+% \subsection{دیاگرام نگاشت فایل به حافظه}
 
-\begin{center}
-\begin{tikzpicture}[>=stealth', node distance=2.5cm, auto]
+% \begin{center}
+% \begin{tikzpicture}[>=stealth', node distance=2.5cm, auto]
 
-% Styles
-\tikzstyle{block} = [rectangle, draw, text width=6em, text centered, minimum height=2em]
-\tikzstyle{line} = [draw, -latex']
+% % Styles
+% \tikzstyle{block} = [rectangle, draw, text width=6em, text centered, minimum height=2em]
+% \tikzstyle{line} = [draw, -latex']
 
-% Nodes
-\node [block] (disk) {File on Disk\\(Block 0,1,2,...)};
-\node [block, right of=disk, node distance=8cm] (ram) {RAM (Memory)\\Buffer/Page 0,1,2,...};
-\node [block, below of=disk, node distance=3cm] (cache) {File System Cache / Page Cache};
-\node [block, right of=cache, node distance=8cm] (cpu) {CPU Access};
+% % Nodes
+% \node [block] (disk) {File on Disk\\(Block 0,1,2,...)};
+% \node [block, right of=disk, node distance=8cm] (ram) {RAM (Memory)\\Buffer/Page 0,1,2,...};
+% \node [block, below of=disk, node distance=3cm] (cache) {File System Cache / Page Cache};
+% \node [block, right of=cache, node distance=8cm] (cpu) {CPU Access};
 
-% Arrows
-\path [line] (disk) -- (ram);
-\path [line] (disk) -- (cache);
-\path [line] (cache) -- (ram);
-\path [line] (ram) -- (cpu);
+% % Arrows
+% \path [line] (disk) -- (ram);
+% \path [line] (disk) -- (cache);
+% \path [line] (cache) -- (ram);
+% \path [line] (ram) -- (cpu);
 
-% Labels
-\node [above of=disk, node distance=1cm] {Disk Blocks};
-\node [above of=ram, node distance=1cm] {Memory Pages / Buffers};
+% % Labels
+% \node [above of=disk, node distance=1cm] {Disk Blocks};
+% \node [above of=ram, node distance=1cm] {Memory Pages / Buffers};
 
-\end{tikzpicture}
-\end{center}
+% \end{tikzpicture}
+% \end{center}
