@@ -1,7 +1,7 @@
 \section{مشکلات و محدودیت‌های ابزارهای دیباگ}
 \label{sec:ch7-debug-limitations}
 
-\subsection*{محدودیت‌های فنی:}
+\subsection{محدودیت‌های فنی:}
 \begin{enumerate}
   \item \textbf{عملکرد پایین در فایل‌های بزرگ}\\
   بارگذاری نقشه‌های حافظه، تحلیل گراف فراخوانی/کنترل و به‌روزرسانی نماهای گرافیکی در پروژه‌های حجیم، به‌ویژه در \en{IDA} و \en{x64dbg}، موجب تأخیر محسوس، مصرف زیاد \lr{RAM} و \lr{UI} غیرپاسخ‌گو می‌شود. این مسئله در باینری‌های فشرده یا دارای تعداد زیاد \lr{DLL/so} تشدید می‌شود. \cite{sikorski2012pma,ida-docs}
@@ -19,7 +19,7 @@
   دیباگ \lr{Kernel-Mode} نیازمند دسترسی‌های ویژه، \lr{Secure-Boot} سازگار و سمبل‌های نسخه‌همخوان است؛ کوچک‌ترین عدم همخوانی، تحلیل \lr{Stack} و \lr{Context} را بی‌اعتبار می‌کند. \cite{ms-windbg,ida-docs}
 \end{enumerate}
 
-\subsection*{تکنیک‌های ضددیباگ (\lr{Anti-Debugging}) و مشکلات امنیتی:}
+\subsection{تکنیک‌های ضددیباگ (\lr{Anti-Debugging}) و مشکلات امنیتی:}
 \begin{enumerate}
   \item \textbf{تشخیص دیباگر}\\
   \lr{API}های رایج: \code{IsDebuggerPresent}, \code{CheckRemoteDebuggerPresent}, \code{NtQueryInformationProcess} (پرچم‌های \lr{ProcessDebugPort/ProcessDebugFlags})، بررسی رجیسترهای \lr{DRx}. بررسی مصنوعات: حضور پنجره/فرآیند شناخته‌شده (\en{x64dbg}, \en{IDA})، وجود هندل‌های مشکوک، نام‌گذاری \lr{Pipe/Mutex} خاص. چک یکپارچگی بایت‌ها برای شناسایی \lr{INT3}. \cite{sikorski2012pma,x64dbg-docs,intel-sdm}
@@ -40,7 +40,7 @@
   اجرای نمونه‌های ناشناس (به‌خصوص بدافزار) در دیباگر ممکن است به فرار از \lr{VM}، آلودگی میزبان یا افشای شبکه منجر شود؛ پیکربندی نادرست \lr{snapshot}/ایزولیشن و پوشه‌های اشتراکی ریسک را بالا می‌برد. \cite{sikorski2012pma,dang2014pre}
 \end{enumerate}
 
-\subsection*{محدودیت‌های قانونی یا اخلاقی در استفاده از ابزار‌های خاص:}
+\subsection{محدودیت‌های قانونی یا اخلاقی در استفاده از ابزار‌های خاص:}
 \textbf{مجوز و حق مؤلف} — مهندسی معکوس برای سازگاری/آموزش در برخی حوزه‌ها معافیت دارد، ولی دور زدن سازوکارهای حفاظت (\lr{DRM}/\lr{Obfuscation}) در بسیاری نظام‌های حقوقی می‌تواند نقض قانون باشد. \cite{collberg1997obf}
 
 \textbf{مالکیت داده و حریم خصوصی} — دیباگ روی داده‌های کاربران/شرکت‌ها باید با مجوز صریح، محیط ایزوله و سیاست نگهداشت انجام شود. \cite{sikorski2012pma}
